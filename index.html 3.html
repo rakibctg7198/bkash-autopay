@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>মানি লোন ফর্ম</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 15px;
+      background: #f5f5f5;
+    }
+    .form-container {
+      background: #fff;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 48%;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .result {
+      background: #e8f4ff;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container" id="loanForm">
+    <h2>💸 মানি লোন আবেদন ফর্ম</h2>
+
+    <label>আবেদনকারীর নাম:</label>
+    <input type="text" id="name" required>
+
+    <label>NID নম্বর:</label>
+    <input type="text" id="nid" required>
+
+    <label>ছবি আপলোড:</label>
+    <input type="file" accept="image/*" id="photo">
+
+    <label>Bkash নম্বর:</label>
+    <input type="tel" id="bkash" required>
+
+    <label>জামানতের পরিমাণ:</label>
+    <select id="deposit" onchange="updateMaxLoan()">
+      <option value="500">৫০০ টাকা (সর্বোচ্চ লোন: ৫,০০০)</option>
+      <option value="1000">১০০০ টাকা (সর্বোচ্চ লোন: ১০,০০০)</option>
+      <option value="1500">১৫০০ টাকা (সর্বোচ্চ লোন: ১৫,০০০)</option>
+      <option value="2000">২০০০ টাকা (সর্বোচ্চ লোন: ২০,০০০)</option>
+      <option value="2500">২৫০০ টাকা (সর্বোচ্চ লোন: ২৫,০০০)</option>
+      <option value="3000">৩০০০ টাকা (সর্বোচ্চ লোন: ৩০,০০০)</option>
+    </select>
+
+    <label>লোনের পরিমাণ (সর্বোচ্চ জামানতের ১০ গুণ):</label>
+    <input type="number" id="loanAmount" required>
+
+    <label>মেয়াদ (মাস):</label>
+    <select id="duration">
+      <option value="6">6 মাস</option>
+      <option value="12">12 মাস</option>
+      <option value="18">18 মাস</option>
+      <option value="24">24 মাস</option>
+      <option value="30">30 মাস</option>
+      <option value="36">36 মাস</option>
+    </select>
+
+    <label>আত্মীয় ১ - মোবাইল নম্বর:</label>
+    <input type="tel" id="rel1phone" required>
+
+    <label>আত্মীয় ১ - সম্পর্ক:</label>
+    <input type="text" id="rel1relation" required>
+
+    <label>আত্মীয় ২ - মোবাইল নম্বর:</label>
+    <input type="tel" id="rel2phone" required>
+
+    <label>আত্মীয় ২ - সম্পর্ক:</label>
+    <input type="text" id="rel2relation" required>
+
+    <div class="result" id="interestResult"></div>
+
+    <div class="btn-group">
+      <button onclick="calculateLoan()">🧮 ক্যালকুলেট</button>
+      <button onclick="printForm()">🖨️ প্রিন্ট</button>
+    </div>
+
+    <div class="btn-group">
+      <button onclick="saveData()">💾 সংরক্ষণ</button>
+      <button onclick="resetForm()">♻️ রিসেট</button>
+    </div>
+  </div>
+
+  <script>
+    function updateMaxLoan() {
+      const deposit = parseInt(document.getElementById('deposit').value);
+      const loanInput = document.getElementById('loanAmount');
+      const maxLoan = deposit * 10;
+      loanInput.max = maxLoan;
+      loanInput.placeholder = `সর্বোচ্চ ${maxLoan} টাকা`;
+    }
+
+    function calculateLoan() {
+      const loan = parseFloat(document.getElementById('loanAmount').value);
+      const duration = parseInt(document.getElementById('duration').value);
+      const interestRate = 0.02; // ২% প্রতি মাস
+
+      const totalInterest = loan * interestRate * duration;
+      const totalPayable = loan + totalInterest;
+      const monthlyPay = (totalPayable / duration).toFixed(2);
+
+      document.getElementById('interestResult').innerHTML =
+        `মোট সুদ: ${totalInterest.toFixed(2)} টাকা<br>
+         পরিশোধযোগ্য মোট: ${totalPayable.toFixed(2)} টাকা<br>
+         প্রতি মাসে কিস্তি: ${monthlyPay} টাকা`;
+    }
+
+    function printForm() {
+      window.print();
+    }
+
+    function saveData() {
+      const data = {
+        name: document.getElementById('name').value,
+        nid: document.getElementById('nid').value,
+        bkash: document.getElementById('bkash').value,
+        loanAmount: document.getElementById('loanAmount').value,
+        duration: document.getElementById('duration').value,
+        rel1: {
+          phone: document.getElementById('rel1phone').value,
+          relation: document.getElementById('rel1relation').value
+        },
+        rel2: {
+          phone: document.getElementById('rel2phone').value,
+          relation: document.getElementById('rel2relation').value
+        }
+      };
+      localStorage.setItem('loanApplication', JSON.stringify(data));
+      alert("✅ আবেদন সফলভাবে সংরক্ষণ হয়েছে!");
+    }
+
+    function resetForm() {
+      document.getElementById('loanForm').reset();
+      document.getElementById('interestResult').innerHTML = "";
+    }
+  </script>
+</body>
+</html>

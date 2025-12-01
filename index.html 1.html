@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সাইন আপ / লগইন</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        h2 {
+            text-align: center;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .switch-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .switch-link a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+        .switch-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="login-form">
+            <h2>লগইন</h2>
+            <form action="#" method="POST">
+                <input type="email" name="email" placeholder="ইমেইল" required>
+                <input type="password" name="password" placeholder="পাসওয়ার্ড" required>
+                <button type="submit">লগইন</button>
+            </form>
+            <div class="switch-link">
+                <p>একাউন্ট নেই? <a href="#" onclick="showSignUp()">সাইন আপ করুন</a></p>
+            </div>
+        </div>
+
+        <div id="signup-form" style="display: none;">
+            <h2>সাইন আপ</h2>
+            <form action="#" method="POST" onsubmit="return checkDeviceRegistration()">
+                <input type="text" name="username" placeholder="ইউজারনেম" required>
+                <input type="email" name="email" placeholder="ইমেইল" required>
+                <input type="password" name="password" placeholder="পাসওয়ার্ড" required>
+                <button type="submit">সাইন আপ</button>
+            </form>
+            <div class="switch-link">
+                <p>একাউন্ট আছে? <a href="#" onclick="showLogin()">লগইন করুন</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to check if the device has already registered using a cookie
+        function checkDeviceRegistration() {
+            var registered = getCookie("device_registered");
+            if (registered) {
+                alert("আপনি ইতিমধ্যে এই ডিভাইসে সাইন আপ করেছেন!");
+                return false; // Prevent form submission
+            }
+            
+            // Set a cookie to mark the device as registered
+            setCookie("device_registered", "true", 365); // The cookie expires in 365 days
+            return true; // Allow form submission
+        }
+
+        // Function to set a cookie
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        // Function to get a cookie
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function showSignUp() {
+            document.getElementById("login-form").style.display = "none";
+            document.getElementById("signup-form").style.display = "block";
+        }
+
+        function showLogin() {
+            document.getElementById("login-form").style.display = "block";
+            document.getElementById("signup-form").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>

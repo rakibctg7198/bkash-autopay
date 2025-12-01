@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ডিপোজিট পেজ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .copy-btn {
+            background-color: #2196F3;
+        }
+        .copy-btn:hover {
+            background-color: #0b7dda;
+        }
+        .paste-btn {
+            background-color: #f44336;
+        }
+        .paste-btn:hover {
+            background-color: #e02f1f;
+        }
+        .note {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #d32f2f;
+        }
+        .instructions {
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ডিপোজিট</h1>
+
+        <!-- Note Section -->
+        <div class="note">
+            সরবণিম্নো জামানত 500
+        </div>
+         <!-- Instructions Section -->
+        <div class="instructions">
+            নিচে দেয়া নাম্বার কপি করে সেন্ড মানি করুন।
+        </div>
+
+        <!-- Bkash Number Section -->
+        <label for="bkashNumber">বিকাশ নম্বর:</label>
+        <input type="text" id="bkashNumber" value="01979448661" readonly>
+        <button class="btn copy-btn" onclick="copyBkashNumber()">কপি করুন</button>
+
+       
+
+        <label for="amount">পরিমাণ:</label>
+        <input type="number" id="amount" placeholder="পরিমাণ লিখুন" required>
+
+        <label for="trxID">ট্রানজেকশন আইডি:</label>
+        <input type="text" id="trxID" placeholder="ট্রানজেকশন আইডি দিন" required>
+        <button class="btn paste-btn" onclick="pasteTrxID()">পেস্ট করুন</button>
+
+        <label for="nid">এনআইডি:</label>
+        <input type="text" id="nid" placeholder="আপনার এনআইডি নম্বর দিন" required>
+
+        <button class="btn" onclick="submitForm()">সাবমিট</button>
+    </div>
+
+    <script>
+        function copyBkashNumber() {
+            const bkashNumber = document.getElementById('bkashNumber');
+            bkashNumber.select();
+            bkashNumber.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            alert("বিকাশ নম্বর কপি করা হয়েছে!");
+        }
+
+        function pasteTrxID() {
+            const trxID = prompt("ট্রানজেকশন আইডি পেস্ট করুন:");
+            if (trxID) {
+                document.getElementById('trxID').value = trxID;
+            }
+        }
+
+        function submitForm() {
+            const amount = document.getElementById('amount').value;
+            const trxID = document.getElementById('trxID').value;
+            const nid = document.getElementById('nid').value;
+
+            if (!amount || !trxID || !nid) {
+                alert("অনুগ্রহ করে সব ফিল্ড পূর্ণ করুন!");
+                return;
+            }
+
+            alert("আপনার ডিপোজিট সফল হয়েছে!");
+            // Here you would normally submit the data to the server using an API or form submission
+        }
+    </script>
+
+</body>
+</html>
